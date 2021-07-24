@@ -16,10 +16,22 @@ import initialState from '../frontend/initialState';
 import serverRoutes from '../frontend/routes/serverRoutes';
 import getManifest from './getManifest';
 
+import cookieParser from 'cookie-parser';
+import  boom from '@hapi/boom';
+import passport from 'passport';
+import axios from 'axios';
+
 dotenv.config();
 
 const app = express();
 const { ENV, PORT } = process.env;
+
+app.use(express.json());
+app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./utils/auth/strategies/basic');
 
 if (ENV === 'development') {
   const webPackConfig = require('../../webpack.config');
