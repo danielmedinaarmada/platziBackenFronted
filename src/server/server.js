@@ -22,8 +22,6 @@ import initialState from '../frontend/initialState';
 import serverRoutes from '../frontend/routes/serverRoutes';
 import getManifest from './getManifest';
 
-
-
 dotenv.config();
 
 const app = express();
@@ -133,8 +131,8 @@ app.post("/auth/sign-up", async function(req, res, next) {
       url: `${process.env.API_URL}/api/auth/sign-up`,
       method: "post",
       data: {
-        'email': user.email,
         'name': user.name,
+        'email': user.email,
         'password': user.password
       }
     });
