@@ -12,13 +12,12 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
 import cookieParser from 'cookie-parser';
-import  boom from '@hapi/boom';
+import boom from '@hapi/boom';
 import passport from 'passport';
 import axios from 'axios';
 
 import reducer from '../frontend/reducers';
 import Layout from '../frontend/components/Layout';
-import initialState from '../frontend/initialState';
 import serverRoutes from '../frontend/routes/serverRoutes';
 import getManifest from './getManifest';
 
@@ -81,13 +80,36 @@ const setResponse = (html, preloadedState, manifest) => {
 };
 
 const renderApp = (req, res) => {
+
+  let initialState;
+  const { email, name, id } = req.cookies;
+
+  if (id) {
+    initialState = {
+      user: {
+        email, name, id
+      },
+      myList: [],
+      trends: [],
+      originals: []
+    }
+  } else {
+    initialState = {
+      user: {},
+      myList: [],
+      trends: [],
+      originals: []
+    }
+  }
+
   const store = createStore(reducer, initialState);
   const preloadedState = store.getState();
+  const isLogged = (initialState.user.id);
   const html = renderToString(
     <Provider store={store}>
       <StaticRouter location={req.url} context={{}}>
         <Layout>
-          {renderRoutes(serverRoutes)}
+          {renderRoutes(serverRoutes(isLogged))}
         </Layout>
       </StaticRouter>
     </Provider>
@@ -95,14 +117,14 @@ const renderApp = (req, res) => {
   res.send(setResponse(html, preloadedState, req.hashManifest));
 };
 
-app.post("/auth/sign-in", async function(req, res, next) {
-  passport.authenticate("basic", function(error, data) {
+app.post("/auth/sign-in", async function (req, res, next) {
+  passport.authenticate("basic", function (error, data) {
     try {
       if (error || !data) {
         next(boom.unauthorized());
       }
 
-      req.login(data, { session: false }, async function(err) {
+      req.login(data, { session: false }, async function (err) {
         if (err) {
           next(err);
         }
@@ -116,13 +138,13 @@ app.post("/auth/sign-in", async function(req, res, next) {
 
         res.status(200).json(user);
       });
-    } catch(err) {
+    } catch (err) {
       next(err);
     }
   })(req, res, next);
 });
 
-app.post("/auth/sign-up", async function(req, res, next) {
+app.post("/auth/sign-up", async function (req, res, next) {
   const { body: user } = req;
 
   try {
@@ -136,7 +158,7 @@ app.post("/auth/sign-up", async function(req, res, next) {
       }
     });
 
-    res.status(201).json({ 
+    res.status(201).json({
       name: req.body.name,
       email: req.body.email,
       id: userData.data.id
