@@ -17,7 +17,7 @@ const CarouselItem = (props) => {
     });
   }
   const handleDeleteFavorite = (itemId) => {
-    props.deteleFavorite(itemId);
+    props.deleteFavorite(itemId);
   }
   return (
     <div className="carousel-item">
@@ -58,7 +58,7 @@ CarouselItem.propTypes = {
   contentRating: PropTypes.string,
   duration: PropTypes.number,
   cover: PropTypes.string,
-  deteleFavorite: PropTypes.func,
+  deleteFavorite: PropTypes.func,
   setFavorite: PropTypes.func,
 };
 
