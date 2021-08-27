@@ -87,9 +87,7 @@ const renderApp = async (req, res) => {
   try {
     let movieList = await axios({
       url: `${process.env.API_URL}/api/movies`,
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
+      headers: { Authorization: `Bearer ${token}`},
       method: 'get',
     });
 
@@ -103,7 +101,7 @@ const renderApp = async (req, res) => {
       trends: movieList.filter(movie => movie.contentRating === 'PG' && movie._id),
       originals: movieList.filter(movie => movie.contentRating === 'G' && movie._id)
     }
-  }catch(error){
+  }catch(err){
     initialState = {
       user: {},
       myList: [],
