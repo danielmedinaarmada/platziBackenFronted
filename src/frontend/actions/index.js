@@ -35,6 +35,26 @@ export const setError = payload => ({
   payload,
 });
 
+export const postFavorite = (user, movie) => {
+  return (dispatch) => {
+    const userMovie = {
+      userId: user.id,
+      movieId: movie._id,
+    }
+    axios.post('/user-movies', userMovie)
+      .then(({ data }) => {
+        const {
+          data: { movieExist },
+        } = data;
+
+        if (!movieExist) {
+          dispatch(setFavorite(movie))
+        }
+      })
+      .catch(error => dispatch(setError(error)))
+  }
+}
+
 export const registerUser = (payload, redirectUrl) => {
   return (dispatch) => {
     axios.post('/auth/sign-up', payload)
