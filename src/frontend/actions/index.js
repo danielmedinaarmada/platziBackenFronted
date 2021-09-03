@@ -55,6 +55,18 @@ export const postFavorite = (user, movie) => {
   }
 }
 
+export const dropFavorite = (userMovieId, movieId) => {
+  return (dispatch) => {
+    axios.delete(`/user-movies/${userMovieId}`)
+      .then(({ status }) => {
+        if (status === 200) {
+          dispatch(deleteFavorite(movieId));
+        }
+      })
+      .catch((error) => dispatch(setError(error)));
+  };
+};
+
 export const registerUser = (payload, redirectUrl) => {
   return (dispatch) => {
     axios.post('/auth/sign-up', payload)

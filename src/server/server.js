@@ -104,7 +104,7 @@ const renderApp = async (req, res) => {
 
     userMovies.forEach((userMovie) => {
       movieList.forEach((movie) => {
-        if (movie._id === userMovie.movieId){
+        if (movie._id === userMovie.movieId) {
           myList.push(movie)
         }
       })
@@ -217,6 +217,38 @@ app.post("/user-movies", async function (req, res, next) {
   }
 })
 
+
+app.delete('/user-movies/:userMovieId', async (req, res, next) => {
+  try {
+    const { userMovieId } = req.params;
+    const { token, id } = req.cookies;
+
+    let userMovies = await axios({
+      url: `${process.env.API_URL}/api/user-movies/?userId=${id}`,
+      header: { Authorization: `Bearer ${token}` },
+      method: 'get',
+    })
+
+    userMovies = userMovies.data.data;
+
+    const listDelete = userMovies.filter((movie) => movie.movieId === userMovieId);
+    const { data, status } = await axios({
+      url: `${process.env.API_URL}/api/user-movies/${listDelete[0]._id}`,
+      headers: { Authorization: `Bearer ${token}` },
+      method: 'delete',
+    });
+
+    if (status !== 200) {
+      next(boom.badImplementation());
+    }
+
+    res.status(200).json(data);
+  }
+  catch (error) {
+    next(error)
+  }
+
+})
 
 app.get('*', renderApp);
 
