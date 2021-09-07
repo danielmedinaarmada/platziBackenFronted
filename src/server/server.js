@@ -110,7 +110,6 @@ const renderApp = async (req, res) => {
       })
     });
 
-
     initialState = {
       user: {
         id, email, name
@@ -207,10 +206,10 @@ app.post("/user-movies", async function (req, res, next) {
       data: userMovie,
     })
 
-    if (status != 201) {
+    if (status !== 201) {
       return next(boom.badImplementation());
     }
-
+  
     res.status(201).json(data);
   } catch (error) {
     next(error);
@@ -218,28 +217,30 @@ app.post("/user-movies", async function (req, res, next) {
 })
 
 
-app.delete('/user-movies/:userMovieId', async (req, res, next) => {
+app.delete('/user-movies/:userMovieId', async function (req, res, next) {
   try {
     const { userMovieId } = req.params;
     const { token, id } = req.cookies;
 
     let userMovies = await axios({
       url: `${process.env.API_URL}/api/user-movies/?userId=${id}`,
-      header: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token}` },
       method: 'get',
     })
 
     userMovies = userMovies.data.data;
 
     const listDelete = userMovies.filter((movie) => movie.movieId === userMovieId);
+
     const { data, status } = await axios({
       url: `${process.env.API_URL}/api/user-movies/${listDelete[0]._id}`,
       headers: { Authorization: `Bearer ${token}` },
       method: 'delete',
     });
 
+
     if (status !== 200) {
-      next(boom.badImplementation());
+      return next(boom.badImplementation());
     }
 
     res.status(200).json(data);

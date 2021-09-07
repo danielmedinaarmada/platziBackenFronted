@@ -56,6 +56,7 @@ export const postFavorite = (user, movie) => {
 }
 
 export const dropFavorite = (userMovieId, movieId) => {
+  
   return (dispatch) => {
     axios.delete(`/user-movies/${userMovieId}`)
       .then(({ status }) => {

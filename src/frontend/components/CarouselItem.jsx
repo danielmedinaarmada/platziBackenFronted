@@ -14,12 +14,12 @@ const CarouselItem = (props) => {
     const movieExist = myList.find(movie => movie.id === id);
     
     if (!movieExist) {
-      const movie = { id, cover, title, year, contentRating, duration, isList, slug, source, _id };
+      const movie = { id, cover, title, year, contentRating, duration, isList, slug, source, _id};
       props.postFavorite(user, movie);
     }
   }
   const handleDeleteFavorite = (itemId) => {
-    props.dropFavorite(_id, itemId);
+    props.dropFavorite( _id, itemId);
   };
   return (
     <div className="carousel-item">
