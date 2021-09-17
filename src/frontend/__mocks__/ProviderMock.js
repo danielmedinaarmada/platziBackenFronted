@@ -18,4 +18,4 @@ const ProviderMock = props => (
   </Provider>
 );
 
-module.export = ProviderMock;
+module.exports = ProviderMock;
