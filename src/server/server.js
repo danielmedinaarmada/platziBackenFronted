@@ -43,8 +43,10 @@ if (ENV === 'development') {
   app.use(webpackHotMiddleware(compiler));
 } else {
   app.use((req, res, next) => {
-    req.hashManifest = getManifest();
-    next();
+    if (!req.hashManifest) {
+      req.hashManifest = getManifest();
+      next();
+    }
   });
   app.use(helmet());
   app.use(helmet.permittedCrossDomainPolicies());
