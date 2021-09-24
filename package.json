@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "React Base",
   "main": "index.js",
+  "engines": {
+    "node": "14.17.6"
+  },
   "scripts": {
     "build": "webpack-cli --config webpack.config.js --colors",
     "lint": "eslint src/frontend --fix",
     "start:dev": "nodemon src/server/index",
+    "start": "node src/server/index.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
