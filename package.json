@@ -75,7 +75,7 @@
     "file-loader": "^4.3.0",
     "jest": "^27.1.1",
     "mini-css-extract-plugin": "^0.7.0",
-    "node-sass": "^6.0.1",
+    "node-sass": "^4.14.1",
     "react-test-renderer": "^17.0.2",
     "sass-loader": "^7.3.1",
     "style-loader": "^0.23.1",
